@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+   content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>More Green 친환경 크라우드 펀딩</title>
+<!-- Favicon-->
+<link rel="icon" type="image/x-icon" href="/assets/moregreen.ico" />
+<!-- Bootstrap icons-->
+<link
+   href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+   rel="stylesheet" />
+<!-- Core theme CSS (includes Bootstrap)-->
+<link href="/css/styles.css" rel="stylesheet" />
+<script src="/js/jquery-3.6.0.js"></script>
+  <script>
+    $(function () {
+      
+      $('form').on('reset', function () {
+      location.href="index.jsp";
+      
+      });
+      
+      $('form').on('submit', function () {
+        if ($('#m_pwd').val() != $('#m_pwd2').val()) {
+          alert("비밀번호와 비밀번호(확인)의 값이 서로 일치하지 않습니다.\n확인 후 다시 입력해 주세요.");
+          $('#m_pwd').val('');
+          $('#m_pwd2').val('');
+          $('#m_pwd').focus();
+          return false;
+        }
+      });
+      $('#m_id').on('blur', function () {  // m_id에 포커스를 잃었을 때
+        // Ajax : 전체 페이지를 다시 리로딩하지 않고, 페이지 일부만 서버에서 보내준 값으로 변경할 떄 사용
+        // 1 Step
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {  // 5 Step
+          if(xhr.readyState == 4 && xhr.status == 200) {
+            let result = xhr.responseText;
+            if(result.trim() === "true"){  //사용할 수 없는 아이디라는 뜻
+               $('#idCheckResult').html("이미 사용중인 아이디입니다.")
+               .removeClass('falseResult').addClass('trueResult');
+               $('#btnSubmit').prop("disabled", true);
+            }else if(result.trim() === "false"){  //사용가능한 아이디라는 뜻
+               $('#idCheckResult').html("사용 가능한 아이디입니다.")
+               .removeClass('trueResult').addClass('falseResult');
+              $('#btnSubmit').prop("disabled", false); 
+            }
+          }
+        };
+        // 2 Step
+        xhr.open("POST", "/idcheck.jsp", true);  // 동기식 : false, 비동기 : true
+        // 3 Step - post할 때만
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // 4 Step
+        xhr.send("m_id=" + $(this).val().trim()); // user아이디라는 변수에 텍스트박스의 값을 보내, 
+      });
+    });
+  </script>
+  <style>
+    .container {
+      padding-right: 10%;
+      padding-left: 10%;
+    }
+
+    .falseResult {
+      color: green;
+      font-weight: 900;
+      font-size: 1em;
+    }
+
+    .trueResult {
+      color: red;
+      font-weight: 900;
+      font-size: 1em;
+    }
+
+    
+    
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+   <!-- Navigation-->
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container px-4 px-lg-5">
+         <a class="navbar-brand" href="/index.jsp"><img src="/assets/smoregreen1.png" width="150"></a>
+         <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+               <li class="nav-item"><a class="nav-link"
+                  aria-current="page" href="/funding.jsp">펀&nbsp;&nbsp;&nbsp;&nbsp;딩</a></li>
+                  <li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+               <li class="nav-item"><a class="nav-link" href="/notice.jsp">공&nbsp;지&nbsp;사&nbsp;항</a></li>
+
+            </ul>
+
+
+            <form class="d-flex">
+               <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                  <li class="nav-item dropdown"><a
+                     class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+                     role="button" data-bs-toggle="dropdown" aria-expanded="false">회 원</a>
+                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/register.html">회 원 가 입</a></li>
+                        <li>
+                           <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="/login.jsp">로 그 인</a></li>
+                        
+                             
+                     </ul></li>
+               </ul>
+            </form>
+         </div>
+      </div>
+   </nav>
+   <div class="container">
+		<div class="row">
+			<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+				<div class="card card-signin my-5">
+					<div class="card-body">
+						<h5 class="card-title text-center">회 원 가 입</h5>
+						<form class="form-signin" method="post" action="/register.jsp">
+							<div class="form-label-group">
+							
+                        <pre>
+                           <b style="color: red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</b><b> 입력필수</b>
+                        </pre>
+
+                             <!-- 아이디 -->
+                        <span style="color: red" ><b>*</b></span><a style='color: #008B8B; text-align: left;' >아이디</a>
+                <br>
+                           <input type="text" name="m_id" id="m_id" placeholder="숫자 및 영문만 사용가능" 
+                           required="required" autofocus="autofocus" class="form-control">
+
+							</div>
+							
+                     <div class="col-sm-10">
+                        <span id="idCheckResult"></span>
+                      </div>
+                        <!-- 비밀번호 -->
+
+							<div class="form-label-group">
+								
+                        <span style="color: red"><b>*</b></span><a style="color: #008B8B;">비밀번호</a>
+                        <br>
+                        <input type="password" name="m_pwd" id="m_pwd" placeholder="비밀번호"
+                  required="required" class="form-control" >
+							</div>
+
+                     <br>
+           
+               <!-- 비밀번호 재확인 -->
+               <div>
+               <span style="color: red"><b>*</b></span><a style="color: #008B8B;">비밀번호 재확인</a>
+              
+                  <input type="password" name="m_pwd2" id="m_pwd2" placeholder="비밀번호 재확인"
+                  required="required" onchange="pwd_chk()" class="form-control">
+               <div id="same"></div>
+							</div>
+                     <br>
+
+                     <div>
+                        <!-- 닉네임 -->
+                        <span style="color: red"><b>*</b></span><a style="color: #008B8B;">닉네임</a>
+                        <br>
+                        <input type="text" name="m_alias" id="m_alias" placeholder="닉네임"
+                           required="required" class="form-control">
+                     </div>
+                     <br>
+                     <div>
+                        <!-- 이메일 -->
+                        <span style="color: red"><b>*</b></span><a style="color: #008B8B;">이메일</a>
+                        <br>
+                        <input type="email" name="m_email" id="m_email" placeholder="이메일"
+                           required="required" class="form-control">
+                     </div>
+                     <br>
+                     <div>
+                        <!-- 이름 -->
+                        <span style="color: red"><b>*</b></span><a style="color: #008B8B;">이름</a>
+                        <br>
+                        <input type="text" name="m_name" id="m_name" placeholder="이름"
+                           required="required" class="form-control">
+                     </div>
+                     <br>
+                     <div>
+                        <!-- 휴대전화 -->
+                        <span style="color: red"><b>*</b></span><a style="color: #008B8B;">휴대전화</a>
+                        <br>
+                        <input type="tel" name="m_phone" required="required"
+                           pattern="010\d{3,4}\d{4}" placeholder="하이픈없이 번호만입력"
+                           title="010숫자3/4숫자4" class="form-control">
+                     </div>
+         
+                     <br>
+                     <div>
+                        <!-- 주소 -->
+                        <span style="color: red"><b>*</b></span><a style="color: #008B8B;">주소</a>
+                        <br>
+                        <input type="text" name="m_addr" id="m_addr" placeholder="주소"
+                           required="required" class="form-control">
+                     </div>
+                     <br>
+                     <div>
+                        <!-- 사업자명 -->
+                        <b>&nbsp;</b><a style="color: #008B8B;">사업자명</a> 
+                        <br>
+                        <input type="text" name="m_sname" id="m_sname" placeholder="사업자명" 
+                        class="form-control">
+                     </div>
+                     <br>
+         
+                     <div>
+                        <!-- 상호명 -->
+                      <b>&nbsp;</b> <a style="color: #008B8B;">상호명</a>
+                        <br>
+                        <input type="text" name="m_bname" id="m_bname" placeholder="상호명" 
+                        class="form-control">
+                     </div>
+                     <br>
+         
+                     <div>
+                        <!-- 사업자등록번호 -->
+                       <b>&nbsp;</b><a style="color: #008B8B;">사업자등록번호</a> 
+                       <br>
+                        <input type="text" name="m_bumber" id="m_bnumber" placeholder="사업자등록번호"
+                        class="form-control">
+                     </div>
+         
+                     <br>
+
+
+
+
+
+
+
+
+							<hr>
+
+							
+							<div style=" text-align: center;">
+                        <div>
+                           <!-- 가입하기 -->
+                           
+                             &nbsp;&nbsp;<button type="submit" class="btn btn-success" id='btnSubmit'>가입</button> 
+                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                           <button type="reset" class="btn btn-danger" >취소</button>
+                          
+                        </div>
+				
+								</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+          
+      
+  
+   <!-- Footer-->
+   <footer class="py-3 bg-dark mt-auto">
+      <div class="container">
+         <p class="m-0 text-center text-white">Copyright &copy; MOREGREEN
+            CROWD FUNDING 2022</p>
+      </div>
+   </footer>
+   <!-- Bootstrap core JS-->
+   <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+   <!-- Core theme JS-->
+   <script src="/js/scripts.js"></script>
+</body>
+
+</html>
